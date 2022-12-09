@@ -13,13 +13,13 @@ function NavBar({ loggedIn, onLogout }) {
         <Link className="navbar-item" to="/">
           Home
         </Link>
-        {loggedIn ? (
+        { loggedIn ? (
           <>
             <Link className="navbar-item" to="/jobs/new">
               Post Job
             </Link>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a className="navbar-item" onClick={handleLogout}>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */ }
+            <a className="navbar-item" onClick={ handleLogout }>
               Logout
             </a>
           </>
@@ -27,7 +27,10 @@ function NavBar({ loggedIn, onLogout }) {
           <Link className="navbar-item" to="/login">
             Login
           </Link>
-        )}
+        ) }
+        <Link className="navbar-item" to="/jobs/new">
+          Create
+        </Link>
       </div>
     </nav>
   );
