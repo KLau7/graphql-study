@@ -10,15 +10,14 @@ function JobForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const companyId = 'pVbRRBQtMVw6lUAkj1k43'
     const existingJob = await getJob({ title });
     if (existingJob) {
       // update
-      const input = { ...existingJob, title, description, companyId: existingJob.company.id };
+      const input = { ...existingJob, title, description };
       delete input.company;
       await updateJob(input);
     } else {
-      const createdJob = await createJob({ title, description, companyId });
+      const createdJob = await createJob({ title, description });
       navigate('/jobs/' + createdJob.id)
     }
   };

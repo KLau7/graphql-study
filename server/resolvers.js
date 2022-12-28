@@ -6,6 +6,10 @@ const findJob = (_, { id, title }) => {
   return Job.findOne(job => job.title.toLowerCase() === title.toLowerCase());
 }
 
+const rejectIf = (condition, msg) => {
+  if (condition) throw new Error(msg);
+}
+
 export const resolvers = {
   Query: {
     jobs: () => Job.findAll(),
@@ -14,14 +18,21 @@ export const resolvers = {
   },
 
   Mutation: {
-    createJob: (_root, { input }) => {
-      return Job.create(input);
+    createJob: (_root, { input }, { user }) => {
+      rejectIf(!user, 'Unauthorized');
+      return Job.create({ ...input, companyId: user.companyId });
     },
-    deleteJob: (_root, { id }) => {
+    deleteJob: async (_root, { id }, { user }) => {
+      rejectIf(!user, 'Unauthorized');
+      const job = await Job.findById(id);
+      rejectIf(job.companyId !== user.companyId, 'No permission');
       return Job.delete(id);
     },
-    updateJob: (_root, { input }) => {
-      return Job.update(input);
+    updateJob: async (_root, { input }, { user }) => {
+      rejectIf(!user, 'Unauthorized');
+      const job = await Job.findById(input.id);
+      rejectIf(job.companyId !== user.companyId, 'No permission');
+      return Job.update({ ...input, companyId: job.companyId });
     },
   },
 

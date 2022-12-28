@@ -1,4 +1,6 @@
-import { gql, request } from 'graphql-request';
+import { gql } from '@apollo/client'
+import { request } from 'graphql-request';
+import { getAccessToken } from "../auth";
 
 const GRAPHQL_URL = 'http://localhost:9000/graphql';
 
@@ -65,7 +67,8 @@ export async function createJob(input) {
 	}
   `;
 
-  const { job } = await request(GRAPHQL_URL, query, { input });
+  const header = { 'Authorization': `Bearer ${ getAccessToken() }` }
+  const { job } = await request(GRAPHQL_URL, query, { input }, header);
   return job;
 }
 
@@ -78,7 +81,8 @@ export async function deleteJob(deleteJobId) {
 		}
   `;
 
-  const { job } = await request(GRAPHQL_URL, query, { deleteJobId });
+  const header = { 'Authorization': `Bearer ${ getAccessToken() }` }
+  const { job } = await request(GRAPHQL_URL, query, { deleteJobId }, header);
   return job;
 }
 
@@ -97,6 +101,7 @@ export async function updateJob(input) {
 		}
   `;
 
-  const { job } = await request(GRAPHQL_URL, query, { input });
+  const header = { 'Authorization': `Bearer ${ getAccessToken() }` }
+  const { job } = await request(GRAPHQL_URL, query, { input }, header);
   return job;
 }
